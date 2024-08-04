@@ -27,14 +27,14 @@ export const routes: Routes = [
           ),
         data: { title: 'Dashboard' },
       },
-      // {
-      //   path: 'appointments',
-      //   loadComponent: () =>
-      //     import('./pages/appointments/appointments.component').then(
-      //       (m) => m.AppointmentsComponent
-      //     ),
-      //   data: { title: 'Appointments' },
-      // },
+      {
+        path: 'appointments',
+        loadComponent: () =>
+          import('./pages/appointments/appointments.component').then(
+            (m) => m.AppointmentsComponent
+          ),
+        data: { title: 'Appointments' },
+      },
       // {
       //   path: 'appointments/new',
       //   loadComponent: () =>
