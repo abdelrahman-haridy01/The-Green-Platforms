@@ -75,14 +75,14 @@ export const routes: Routes = [
       //     ),
       //   data: { title: 'Update doctor' },
       // },
-      // {
-      //   path: 'departments',
-      //   loadComponent: () =>
-      //     import('./pages/departments/departments.component').then(
-      //       (m) => m.DepartmentsComponent
-      //     ),
-      //   data: { title: 'Departments' },
-      // },
+      {
+        path: 'departments',
+        loadComponent: () =>
+          import('./pages/departments/departments.component').then(
+            (m) => m.DepartmentsComponent
+          ),
+        data: { title: 'Departments' },
+      },
       // {
       //   path: 'departments/new',
       //   loadComponent: () =>
