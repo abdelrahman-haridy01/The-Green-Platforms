@@ -51,14 +51,14 @@ export const routes: Routes = [
       //     ),
       //   data: { title: 'Update appointments' },
       // },
-      // {
-      //   path: 'doctors',
-      //   loadComponent: () =>
-      //     import('./pages/doctors/doctors.component').then(
-      //       (m) => m.DoctorsComponent
-      //     ),
-      //   data: { title: 'Doctors' },
-      // },
+      {
+        path: 'doctors',
+        loadComponent: () =>
+          import('./pages/doctors/doctors.component').then(
+            (m) => m.DoctorsComponent
+          ),
+        data: { title: 'Doctors' },
+      },
       // {
       //   path: 'doctors/new',
       //   loadComponent: () =>
