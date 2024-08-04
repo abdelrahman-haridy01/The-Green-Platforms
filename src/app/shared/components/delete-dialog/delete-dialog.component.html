@@ -1,0 +1,39 @@
+<p-dialog
+  header="Item deletion"
+  [(visible)]="displayDeleteDialog"
+  [modal]="true"
+  [closable]="false"
+>
+  <div class="p-grid p-align-center p-justify-center">
+    <div class="p-col-12">
+      <p>
+        <strong
+          >Are you sure you want to delete
+          <span class="text-primary">this item</span>?</strong
+        >
+      </p>
+      <p>
+        All information associated with this item will be permanently deleted.
+        <span class="text-danger">This operation cannot be undone.</span>
+      </p>
+    </div>
+    <div class="p-col-12 p-text-right">
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        icon="pi pi-times"
+        (click)="displayDeleteDialog = false"
+        class="p-button-text"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Confirm"
+        icon="pi pi-check"
+        (click)="onConfirmDelete()"
+        class="p-button-danger"
+      ></button>
+    </div>
+  </div>
+</p-dialog>

@@ -5,7 +5,7 @@ export interface AppConfig {
   inputStyle: string;
   colorScheme: string;
   theme: string;
-  ripple: boolean;
+  drakMode: boolean;
   menuMode: string;
   scale: number;
 }
@@ -24,7 +24,7 @@ interface LayoutState {
 })
 export class LayoutService {
   _config: AppConfig = {
-    ripple: false,
+    drakMode: false,
     inputStyle: 'outlined',
     menuMode: 'static',
     colorScheme: 'light',

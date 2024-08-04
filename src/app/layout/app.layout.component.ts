@@ -150,7 +150,7 @@ export class AppLayoutComponent implements OnDestroy {
       'layout-overlay-active': this.layoutService.state.overlayMenuActive,
       'layout-mobile-active': this.layoutService.state.staticMenuMobileActive,
       'p-input-filled': this.layoutService.config().inputStyle === 'filled',
-      'p-ripple-disabled': !this.layoutService.config().ripple,
+      'p-ripple-disabled': !this.layoutService.config().drakMode,
     };
   }
 

@@ -5,7 +5,7 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
 import { RouterLink } from '@angular/router';
 
@@ -22,6 +22,7 @@ import { RouterLink } from '@angular/router';
     RouterLink,
     NgIf,
     FormsModule,
+    NgFor,
   ],
 })
 export class AppConfigComponent {
@@ -68,13 +69,14 @@ export class AppConfigComponent {
     this.layoutService.config().inputStyle = _val;
   }
 
-  get ripple(): boolean {
-    return this.layoutService.config().ripple;
+  get drakMode(): boolean {
+    return this.layoutService.config().drakMode;
   }
-  set ripple(_val: boolean) {
+  set drakMode(_val: boolean) {
     this.layoutService.config.update((config) => ({
       ...config,
-      ripple: _val,
+      drakMode: _val,
+      theme: _val ? 'the-green-dark' : 'the-green-light',
     }));
   }
 

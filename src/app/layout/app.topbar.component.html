@@ -23,6 +23,10 @@
         layoutService.state.profileSidebarVisible
     }"
   >
+    <button (click)="drakMode = !drakMode" class="p-link layout-topbar-button">
+      <i class="pi pi-{{ drakMode ? 'sun' : 'moon' }}"></i>
+      <span>Calendar</span>
+    </button>
     <button class="p-link layout-topbar-button">
       <i class="pi pi-calendar"></i>
       <span>Calendar</span>

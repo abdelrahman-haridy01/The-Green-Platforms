@@ -1,0 +1,159 @@
+<div class="container">
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="content lg-form">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-subtitle
+          >Lorem Ipsum is simply dummy text of the printing</mat-card-subtitle
+        >
+        <mat-card-title>{{ formTitle }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-divider class="mb-3"></mat-divider>
+        <div class="row pb-3">
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Parient name</mat-label>
+              <input
+                formControlName="parientName"
+                matInput
+                placeholder="parientName"
+              />
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="submitted && f['parientName'].errors">
+                <span *ngIf="f['parientName'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Doctor Name</mat-label>
+              <input
+                formControlName="doctorName"
+                matInput
+                placeholder="doctorName"
+              />
+              <mat-icon matSuffix
+                ><span class="material-symbols-outlined">
+                  clinical_notes
+                </span></mat-icon
+              >
+              <mat-error *ngIf="submitted && f['doctorName'].errors">
+                <span *ngIf="f['doctorName'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Parient email</mat-label>
+              <input
+                formControlName="parientEmail"
+                matInput
+                placeholder="parientEmail"
+              />
+              <mat-error *ngIf="submitted && f['parientEmail'].errors">
+                <span *ngIf="f['parientEmail'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Charges</mat-label>
+              <input formControlName="charges" matInput placeholder="charges" />
+              <mat-error *ngIf="submitted && f['charges'].errors">
+                <span *ngIf="f['charges'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Date</mat-label>
+              <input formControlName="date" matInput [matDatepicker]="date" />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="date"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #date></mat-datepicker>
+              <mat-error *ngIf="submitted && f['date'].errors">
+                <span *ngIf="f['date'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Tax</mat-label>
+              <input formControlName="tax" matInput placeholder="tax" />
+              <mat-error *ngIf="submitted && f['tax'].errors">
+                <span *ngIf="f['tax'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Discount</mat-label>
+              <input
+                formControlName="discount"
+                matInput
+                placeholder="discount"
+              />
+              <mat-error *ngIf="submitted && f['discount'].errors">
+                <span *ngIf="f['discount'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>total</mat-label>
+              <input formControlName="total" matInput placeholder="total" />
+              <mat-error *ngIf="submitted && f['total'].errors">
+                <span *ngIf="f['total'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option
+                  *ngFor="let item of ['Paid', 'Unpaid']"
+                  [value]="item"
+                  >{{ item }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button color="primary" class="mx-2">Save</button>
+        <button mat-raised-button [routerLink]="['/payments']">Back</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

@@ -1,0 +1,161 @@
+<div class="container">
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="content lg-form">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-subtitle
+          >Lorem Ipsum is simply dummy text of the printing</mat-card-subtitle
+        >
+        <mat-card-title>{{ formTitle }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-divider class="mb-3"></mat-divider>
+
+        <div class="row pb-3">
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Parient name</mat-label>
+              <input
+                formControlName="parientName"
+                matInput
+                placeholder="Parient name"
+              />
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="submitted && f['parientName'].errors">
+                <span *ngIf="f['parientName'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Doctor Name</mat-label>
+              <input
+                formControlName="doctorName"
+                matInput
+                placeholder="doctorName"
+              />
+              <mat-icon matSuffix
+                ><span class="material-symbols-outlined">
+                  clinical_notes
+                </span></mat-icon
+              >
+              <mat-error *ngIf="submitted && f['doctorName'].errors">
+                <span *ngIf="f['doctorName'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Room Number</mat-label>
+              <input formControlName="roomNumber" matInput />
+              <mat-error *ngIf="submitted && f['roomNumber'].errors">
+                <span *ngIf="f['roomNumber'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Room type</mat-label>
+              <mat-select formControlName="roomType">
+                <mat-option *ngFor="let item of roomTypeList" [value]="item"
+                  >{{ item }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="submitted && f['roomType'].errors">
+                <span *ngIf="f['roomType'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Allotment Date</mat-label>
+              <input
+                formControlName="allotmentDate"
+                matInput
+                [matDatepicker]="allotmentDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="allotmentDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #allotmentDate></mat-datepicker>
+              <mat-error *ngIf="submitted && f['allotmentDate'].errors">
+                <span *ngIf="f['allotmentDate'].errors['required']"
+                  >This field is mandatory</span
+                >
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Discharge Date</mat-label>
+              <input
+                formControlName="dischargeDate"
+                matInput
+                [matDatepicker]="dischargeDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="dischargeDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #dischargeDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Discount</mat-label>
+              <input
+                formControlName="discount"
+                matInput
+                placeholder="discount"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Total</mat-label>
+              <input formControlName="total" matInput placeholder="total" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let item of roomStatusList" [value]="item"
+                >{{ item }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="submitted && f['status'].errors">
+              <span *ngIf="f['status'].errors['required']"
+                >This field is mandatory</span
+              >
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button color="primary" class="mx-2">Save</button>
+        <button mat-raised-button [routerLink]="['/room-allotment']">
+          Back
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>
