@@ -145,14 +145,14 @@ export const routes: Routes = [
       //     ).then((m) => m.RoomAllotmentViewComponent),
       //   data: { title: 'Update room allotment' },
       // },
-      // {
-      //   path: 'patients',
-      //   loadComponent: () =>
-      //     import('./pages/patients/patients.component').then(
-      //       (m) => m.PatientsComponent
-      //     ),
-      //   data: { title: 'Patients' },
-      // },
+      {
+        path: 'patients',
+        loadComponent: () =>
+          import('./pages/patients/patients.component').then(
+            (m) => m.PatientsComponent
+          ),
+        data: { title: 'Patients' },
+      },
       // {
       //   path: 'patients/new',
       //   loadComponent: () =>

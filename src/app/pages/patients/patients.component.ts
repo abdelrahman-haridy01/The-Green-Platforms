@@ -1,127 +1,70 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { Component } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { PatientDto } from '../../shared/dto/patient-dto';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSort } from '@angular/material/sort';
-import { DeleteDialogComponent } from './../../shared/components/delete-dialog/delete-dialog.component';
-import { ToastrService } from 'ngx-toastr';
-import { PATIENT_DATA } from 'src/app/shared/dumy-data';
-import { StaticDataService } from 'src/app/shared/services/static-data.service';
-import { take } from 'rxjs/operators';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { PATIENT_DATA } from '../../shared/dumy-data';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-patients',
   templateUrl: './patients.component.html',
-  styleUrls: ['./patients.component.scss']
+  styleUrls: ['./patients.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    ConfirmDialogModule,
+    ToastModule,
+    PaginatorModule,
+  ],
+  providers: [ConfirmationService, MessageService],
 })
-export class PatientsComponent implements AfterViewInit {
-  displayedColumns: string[] = [
-    'id',
-    'name',
-    'age',
-    'gender',
-    'phoneNumber',
-    'address',
-    'active',
-    'actions'
-  ];
-  dataSource = new MatTableDataSource<PatientDto>(PATIENT_DATA);
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatTable, { static: true }) table!: MatTable<PatientDto>;
-  @ViewChild(MatSort)
-  sort!: MatSort;
+export class PatientsComponent {
+  patients: PatientDto[] = PATIENT_DATA;
 
   constructor(
-    public dialog: MatDialog,
-    private toastr: ToastrService,
-    private staticDataService: StaticDataService
-  ) {
-    // Get data from "item form" and run add new item function
-    this.staticDataService.selectedItem$
-      .pipe(take(1))
-      .subscribe((value: any) => {
-        if (
-          value &&
-          value['dataType'] == 'patients' &&
-          Object.keys(value).length != 0
-        ) {
-          if (value['id'] != null) {
-            const objWithIdIndex = this.dataSource.data.findIndex(
-              obj => obj.id === value['id']
-            );
-            if (objWithIdIndex > -1) {
-              this.dataSource.data.splice(objWithIdIndex, 1);
-            }
-          } else {
-            const objWithIdIndex = this.dataSource.data.findIndex(
-              obj => obj.name === value['formData'].name
-            );
-            if (objWithIdIndex > -1) {
-              this.dataSource.data.splice(objWithIdIndex, 1);
-            }
-          }
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ) {}
 
-          this.addData(value);
+  deleteItem(event: Event, id: any) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `<p><strong>Are you sure you want to delete <span class="text-primary">this item</span>?</strong></p>
+                <p>All information associated with this item will be permanently deleted. <span class="text-danger">This operation cannot be undone.</span></p>`,
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-text',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      acceptLabel: 'Confirm',
+      rejectLabel: 'Cancel',
+      accept: () => {
+        const index = this.patients.findIndex((obj) => obj.id === id);
+        if (index > -1) {
+          this.patients.splice(index, 1);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Item deleted successfully',
+            life: 3000,
+          });
         }
-      });
-  }
-
-  ngAfterViewInit() {
-    this.randerTable();
-  }
-
-  // Delete item
-  deleteItem(id: any) {
-    const dialogRef = this.dialog.open(DeleteDialogComponent);
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        const objWithIdIndex = this.dataSource.data.findIndex(
-          obj => obj.id === id
-        );
-
-        if (objWithIdIndex > -1) {
-          this.dataSource.data.splice(objWithIdIndex, 1);
-        }
-
-        this.randerTable();
-        this.toastr.success('Item deleted successfuly', 'Success', {
-          timeOut: 3000,
-          closeButton: true,
-          progressBar: true
-        });
-      }
+      },
     });
   }
 
-  // Adding item
-  addData(data: any) {
-    let key =
-      data['id'] == null ? (PATIENT_DATA.length + 1).toString() : data['id'];
-    let body = {
-      id: key,
-      name: data['formData'].name,
-      age: data['formData'].age,
-      gender: data['formData'].gender,
-      phoneNumber: data['formData'].phoneNumber,
-      address: data['formData'].address,
-      active: data['formData'].active
-    };
-    this.dataSource.data.unshift(body);
-  }
-
-  // Searching functions
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  // Rendering the table
-  randerTable() {
-    this.table.renderRows();
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.connect();
+  onGlobalFilter(table: any, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 }
