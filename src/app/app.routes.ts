@@ -169,14 +169,14 @@ export const routes: Routes = [
       //     ),
       //   data: { title: 'Update patients' },
       // },
-      // {
-      //   path: 'payments',
-      //   loadComponent: () =>
-      //     import('./pages/payments/payments.component').then(
-      //       (m) => m.PaymentsComponent
-      //     ),
-      //   data: { title: 'Payments' },
-      // },
+      {
+        path: 'payments',
+        loadComponent: () =>
+          import('./pages/payments/payments.component').then(
+            (m) => m.PaymentsComponent
+          ),
+        data: { title: 'Payments' },
+      },
       // {
       //   path: 'payments/new',
       //   loadComponent: () =>

@@ -1,132 +1,70 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { Component } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { PaymentDto } from '../../shared/dto/payment-dto';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSort } from '@angular/material/sort';
-import { DeleteDialogComponent } from './../../shared/components/delete-dialog/delete-dialog.component';
-import { ToastrService } from 'ngx-toastr';
-import { PAYMENT_DATA } from 'src/app/shared/dumy-data';
-import { StaticDataService } from 'src/app/shared/services/static-data.service';
-import { take } from 'rxjs/operators';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { PAYMENT_DATA } from '../../shared/dumy-data';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-payments',
   templateUrl: './payments.component.html',
-  styleUrls: ['./payments.component.scss']
+  styleUrls: ['./payments.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    ConfirmDialogModule,
+    ToastModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    PaginatorModule,
+  ],
+  providers: [ConfirmationService, MessageService],
 })
-export class PaymentsComponent implements AfterViewInit {
-  displayedColumns: string[] = [
-    'id',
-    'parientName',
-    'parientEmail',
-    'date',
-    'charges',
-    'tax',
-    'discount',
-    'total',
-    'status',
-    'actions'
-  ];
-  dataSource = new MatTableDataSource<PaymentDto>(PAYMENT_DATA);
-
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatTable, { static: true }) table!: MatTable<PaymentDto>;
-  @ViewChild(MatSort)
-  sort!: MatSort;
+export class PaymentsComponent {
+  dataSource: PaymentDto[] = PAYMENT_DATA;
 
   constructor(
-    public dialog: MatDialog,
-    private toastr: ToastrService,
-    private staticDataService: StaticDataService
-  ) {
-    // Get data from "item form" and run add new item function
-    this.staticDataService.selectedItem$
-      .pipe(take(1))
-      .subscribe((value: any) => {
-        if (
-          value &&
-          value['dataType'] == 'payments' &&
-          Object.keys(value).length != 0
-        ) {
-          if (value['id'] != null) {
-            const objWithIdIndex = this.dataSource.data.findIndex(
-              obj => obj.id === value['id']
-            );
-            if (objWithIdIndex > -1) {
-              this.dataSource.data.splice(objWithIdIndex, 1);
-            }
-          } else {
-            const objWithIdIndex = this.dataSource.data.findIndex(
-              obj => obj.parientEmail === value['formData'].parientEmail
-            );
-            if (objWithIdIndex > -1) {
-              this.dataSource.data.splice(objWithIdIndex, 1);
-            }
-          }
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ) {}
 
-          this.addData(value);
+  deleteItem(event: Event, id: any) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `<p><strong>Are you sure you want to delete <span class="text-primary">this item</span>?</strong></p>
+                <p>All information associated with this item will be permanently deleted. <span class="text-danger">This operation cannot be undone.</span></p>`,
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-text',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      acceptLabel: 'Confirm',
+      rejectLabel: 'Cancel',
+      accept: () => {
+        const index = this.dataSource.findIndex((obj) => obj.id === id);
+        if (index > -1) {
+          this.dataSource.splice(index, 1);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Item deleted successfully',
+            life: 3000,
+          });
         }
-      });
-  }
-
-  ngAfterViewInit() {
-    this.randerTable();
-  }
-
-  // Delete item
-  deleteItem(id: any) {
-    const dialogRef = this.dialog.open(DeleteDialogComponent);
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        const objWithIdIndex = this.dataSource.data.findIndex(
-          obj => obj.id === id
-        );
-
-        if (objWithIdIndex > -1) {
-          this.dataSource.data.splice(objWithIdIndex, 1);
-        }
-
-        this.randerTable();
-        this.toastr.success('Item deleted successfuly', 'Success', {
-          timeOut: 3000,
-          closeButton: true,
-          progressBar: true
-        });
-      }
+      },
     });
   }
 
-  // Adding item
-  addData(data: any) {
-    let key =
-      data['id'] == null ? (PAYMENT_DATA.length + 1).toString() : data['id'];
-    let body = {
-      id: key,
-      parientName: data['formData'].parientName,
-      doctorName: data['formData'].doctorName,
-      parientEmail: data['formData'].parientEmail,
-      date: data['formData'].date,
-      charges: data['formData'].charges,
-      tax: data['formData'].tax,
-      discount: data['formData'].discount,
-      total: data['formData'].total,
-      status: data['formData'].status
-    };
-    this.dataSource.data.unshift(body);
-  }
-
-  // Searching functions
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  // Rendering the table
-  randerTable() {
-    this.table.renderRows();
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.connect();
+  onGlobalFilter(table: any, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 }
