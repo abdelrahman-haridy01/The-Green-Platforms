@@ -121,14 +121,14 @@ export const routes: Routes = [
       //     ),
       //   data: { title: 'Update staff' },
       // },
-      // {
-      //   path: 'room-allotment',
-      //   loadComponent: () =>
-      //     import('./pages/room-allotment/room-allotment.component').then(
-      //       (m) => m.RoomAllotmentComponent
-      //     ),
-      //   data: { title: 'Room allotment' },
-      // },
+      {
+        path: 'room-allotment',
+        loadComponent: () =>
+          import('./pages/room-allotment/room-allotment.component').then(
+            (m) => m.RoomAllotmentComponent
+          ),
+        data: { title: 'Room allotment' },
+      },
       // {
       //   path: 'room-allotment/new',
       //   loadComponent: () =>
