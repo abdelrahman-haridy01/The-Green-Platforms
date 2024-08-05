@@ -20,19 +20,19 @@
     }
     .layout-root-menuitem {
       > .layout-menuitem-root-text {
-        color: var(--primary-color-text);
+        color: var(--gray-50);
         background-color: rgba(255, 255, 255, 0.5);
       }
     }
     ul {
       a {
-        color: var(--primary-color-text);
+        color: var(--gray-50);
         &.active-route {
           background-color: rgba(255, 255, 255, 0.08);
-          color: var(--primary-color-text);
+          color: var(--gray-50);
         }
         &:hover {
-          color: var(--primary-color-text);
+          color: var(--gray-50);
           background-color: rgba(255, 255, 255, 0.08);
         }
       }
