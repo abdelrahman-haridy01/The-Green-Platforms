@@ -1,19 +1,34 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSort } from '@angular/material/sort';
-import { DeleteDialogComponent } from './../../shared/components/delete-dialog/delete-dialog.component';
-import { ToastrService } from 'ngx-toastr';
-import { STAFF_DATA } from 'src/app/shared/dumy-data';
-import { StaticDataService } from 'src/app/shared/services/static-data.service';
-import { take } from 'rxjs/operators';
-import { StaffDto } from 'src/app/shared/dto/staff-dto';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { take } from 'rxjs';
+import { StaffDto } from '../../shared/dto/staff-dto';
+import { STAFF_DATA } from '../../shared/dumy-data';
+import { StaticDataService } from '../../shared/services/static-data.service';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-staff',
+  standalone: true,
   templateUrl: './staff.component.html',
-  styleUrls: ['./staff.component.scss']
+  styleUrls: ['./staff.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ConfirmDialogModule,
+    ToastModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    PaginatorModule,
+  ],
+  providers: [ConfirmationService, MessageService],
 })
 export class StaffComponent implements AfterViewInit {
   displayedColumns: string[] = [
@@ -24,21 +39,18 @@ export class StaffComponent implements AfterViewInit {
     'phoneNumber',
     'address',
     'active',
-    'actions'
+    'actions',
   ];
-  dataSource = new MatTableDataSource<StaffDto>(STAFF_DATA);
+  dataSource: StaffDto[] = STAFF_DATA;
+  globalFilter: string = '';
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatTable, { static: true }) table!: MatTable<StaffDto>;
-  @ViewChild(MatSort)
-  sort!: MatSort;
+  @ViewChild('dt') table: any;
 
   constructor(
-    public dialog: MatDialog,
-    private toastr: ToastrService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
     private staticDataService: StaticDataService
   ) {
-    // Get data from "item form" and run add new item function
     this.staticDataService.selectedItem$
       .pipe(take(1))
       .subscribe((value: any) => {
@@ -48,18 +60,18 @@ export class StaffComponent implements AfterViewInit {
           Object.keys(value).length != 0
         ) {
           if (value['id'] != null) {
-            const objWithIdIndex = this.dataSource.data.findIndex(
-              obj => obj.id === value['id']
+            const objWithIdIndex = this.dataSource.findIndex(
+              (obj) => obj.id === value['id']
             );
             if (objWithIdIndex > -1) {
-              this.dataSource.data.splice(objWithIdIndex, 1);
+              this.dataSource.splice(objWithIdIndex, 1);
             }
           } else {
-            const objWithIdIndex = this.dataSource.data.findIndex(
-              obj => obj.name === value['formData'].name
+            const objWithIdIndex = this.dataSource.findIndex(
+              (obj) => obj.name === value['formData'].name
             );
             if (objWithIdIndex > -1) {
-              this.dataSource.data.splice(objWithIdIndex, 1);
+              this.dataSource.splice(objWithIdIndex, 1);
             }
           }
 
@@ -69,29 +81,37 @@ export class StaffComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.randerTable();
+    // Optionally, you can handle additional initialization if needed
   }
 
   // Delete item
-  deleteItem(id: any) {
-    const dialogRef = this.dialog.open(DeleteDialogComponent);
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        const objWithIdIndex = this.dataSource.data.findIndex(
-          obj => obj.id === id
+  deleteItem(event: Event, id: any) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `<p><strong>Are you sure you want to delete <span class="text-primary">this item</span>?</strong></p>
+                <p>All information associated with this item will be permanently deleted. <span class="text-danger">This operation cannot be undone.</span></p>`,
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      acceptLabel: 'Confirm',
+      rejectLabel: 'Cancel',
+      accept: () => {
+        const objWithIdIndex = this.dataSource.findIndex(
+          (obj) => obj.id === id
         );
-
         if (objWithIdIndex > -1) {
-          this.dataSource.data.splice(objWithIdIndex, 1);
+          this.dataSource.splice(objWithIdIndex, 1);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Item deleted successfully',
+            life: 3000,
+          });
         }
-
-        this.randerTable();
-        this.toastr.success('Item deleted successfuly', 'Success', {
-          timeOut: 3000,
-          closeButton: true,
-          progressBar: true
-        });
-      }
+      },
     });
   }
 
@@ -106,22 +126,13 @@ export class StaffComponent implements AfterViewInit {
       email: data['formData'].email,
       phoneNumber: data['formData'].phoneNumber,
       address: data['formData'].address,
-      active: data['formData'].active
+      active: data['formData'].active,
     };
-    this.dataSource.data.unshift(body);
+    this.dataSource.unshift(body);
   }
 
   // Searching functions
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  // Rendering the table
-  randerTable() {
-    this.table.renderRows();
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.connect();
+  onGlobalFilter(table: any, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 }

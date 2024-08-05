@@ -99,12 +99,12 @@ export const routes: Routes = [
       //     ),
       //   data: { title: 'Update Departments' },
       // },
-      // {
-      //   path: 'staff',
-      //   loadComponent: () =>
-      //     import('./pages/staff/staff.component').then((m) => m.StaffComponent),
-      //   data: { title: 'Staff list' },
-      // },
+      {
+        path: 'staff',
+        loadComponent: () =>
+          import('./pages/staff/staff.component').then((m) => m.StaffComponent),
+        data: { title: 'Staff list' },
+      },
       // {
       //   path: 'staff/new',
       //   loadComponent: () =>
