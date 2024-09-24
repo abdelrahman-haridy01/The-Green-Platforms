@@ -35,22 +35,22 @@ export const routes: Routes = [
           ),
         data: { title: 'Appointments' },
       },
-      // {
-      //   path: 'appointments/new',
-      //   loadComponent: () =>
-      //     import('./pages/appointments-view/appointments-view.component').then(
-      //       (m) => m.AppointmentsViewComponent
-      //     ),
-      //   data: { title: 'New appointment' },
-      // },
-      // {
-      //   path: 'appointments/:id',
-      //   loadComponent: () =>
-      //     import('./pages/appointments-view/appointments-view.component').then(
-      //       (m) => m.AppointmentsViewComponent
-      //     ),
-      //   data: { title: 'Update appointments' },
-      // },
+      {
+        path: 'appointments/new',
+        loadComponent: () =>
+          import('./pages/appointments-view/appointments-view.component').then(
+            (m) => m.AppointmentsViewComponent
+          ),
+        data: { title: 'New appointment' },
+      },
+      {
+        path: 'appointments/:id',
+        loadComponent: () =>
+          import('./pages/appointments-view/appointments-view.component').then(
+            (m) => m.AppointmentsViewComponent
+          ),
+        data: { title: 'Update appointments' },
+      },
       {
         path: 'doctors',
         loadComponent: () =>

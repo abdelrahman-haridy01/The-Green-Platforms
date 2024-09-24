@@ -6,7 +6,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { take } from 'rxjs/operators';
 import { AppointmentDto } from '../../shared/dto/appointment-dto';
 import { APPOINTMENTS_DATA } from '../../shared/dumy-data';
@@ -54,6 +54,7 @@ export class DashboardComponent {
   dt2: any;
 
   constructor(
+    private confirmationService: ConfirmationService,
     public dialogService: DialogService,
     private messageService: MessageService,
     private staticDataService: StaticDataService
@@ -89,28 +90,42 @@ export class DashboardComponent {
   }
 
   // Delete item
-  deleteItem(id: any) {
-    this.ref = this.dialogService.open(DeleteDialogComponent, {
-      header: 'Confirm Delete',
-      width: '70%',
-    });
+  deleteItem(event: Event, id: any) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `<p>
+      <strong
+        >Are you sure you want to delete
+        <span class="text-primary">this item</span>?</strong
+      >
+    </p>
+    <p>
+      All information associated with this item will be permanently deleted.
+      <span class="text-danger">This operation cannot be undone.</span>
+    </p>`,
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-text',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      acceptLabel: 'Confirm',
+      rejectLabel: 'Cancel',
 
-    this.ref.onClose.subscribe((result: any) => {
-      if (result) {
+      accept: () => {
         const objWithIdIndex = this.dataSource.findIndex(
           (obj) => obj.id === id
         );
-
         if (objWithIdIndex > -1) {
           this.dataSource.splice(objWithIdIndex, 1);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Item deleted successfully',
+            life: 3000,
+          });
         }
-
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Item deleted successfully',
-        });
-      }
+      },
     });
   }
 

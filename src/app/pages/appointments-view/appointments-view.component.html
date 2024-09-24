@@ -1,129 +1,151 @@
-<div class="container">
+<div class="card mb-4">
+  <h5>{{ formTitle }}</h5>
+  <p>Lorem Ipsum is simply dummy text of the printing</p>
   <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="content lg-form">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-subtitle
-          >Lorem Ipsum is simply dummy text of the printing</mat-card-subtitle
-        >
-        <mat-card-title>{{ formTitle }}</mat-card-title>
-      </mat-card-header>
+    <div class="card-content">
+      <hr class="mb-3" />
 
-      <mat-card-content>
-        <mat-divider class="mb-3"></mat-divider>
-
-        <div class="row pb-3">
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Name</mat-label>
-              <input formControlName="name" matInput placeholder="Name" />
-              <mat-icon matSuffix>person</mat-icon>
-              <mat-error *ngIf="submitted && f['name'].errors">
-                <span *ngIf="f['name'].errors['required']"
-                  >This field is mandatory</span
-                >
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Age</mat-label>
-              <input formControlName="age" matInput placeholder="Age" />
-              <mat-error *ngIf="submitted && f['age'].errors">
-                <span *ngIf="f['age'].errors['required']"
-                  >This field is mandatory</span
-                >
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-12">
-            <mat-radio-group formControlName="gender">
-              <mat-label>Gender</mat-label>
-              <mat-radio-button checked value="male">Male</mat-radio-button>
-              <mat-radio-button value="female">Female</mat-radio-button>
-              <mat-error *ngIf="submitted && f['gender'].errors">
-                <span *ngIf="f['gender'].errors['required']"
-                  >This field is mandatory</span
-                >
-              </mat-error>
-            </mat-radio-group>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Department</mat-label>
-              <mat-select formControlName="department">
-                <mat-option *ngFor="let item of departments" [value]="item"
-                  >{{ item }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="submitted && f['department'].errors">
-                <span *ngIf="f['department'].errors['required']"
-                  >This field is mandatory</span
-                >
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Doctor Name</mat-label>
-              <input
-                formControlName="doctorName"
-                matInput
-                placeholder="doctorName"
-              />
-              <mat-icon matSuffix
-                ><span class="material-symbols-outlined">
-                  clinical_notes
-                </span></mat-icon
-              >
-              <mat-error *ngIf="submitted && f['doctorName'].errors">
-                <span *ngIf="f['doctorName'].errors['required']"
-                  >This field is mandatory</span
-                >
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Date</mat-label>
-              <input formControlName="date" matInput [matDatepicker]="date" />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="date"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #date></mat-datepicker>
-              <mat-error *ngIf="submitted && f['date'].errors">
-                <span *ngIf="f['date'].errors['required']"
-                  >This field is mandatory</span
-                >
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="col-md-6">
-            <mat-form-field appearance="fill">
-              <mat-label>Fees</mat-label>
-              <input formControlName="fees" matInput placeholder="fees" />
-              <mat-error *ngIf="submitted && f['fees'].errors">
-                <span *ngIf="f['fees'].errors['required']"
-                  >This field is mandatory</span
-                >
-              </mat-error>
-            </mat-form-field>
+      <div class="grid pb-3 p-fluid">
+        <div class="col-12 md:col-6">
+          <div class="p-field">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              formControlName="name"
+              pInputText
+              placeholder="Enter your name"
+            />
+            <p-message
+              *ngIf="submitted && f['name'].errors"
+              severity="error"
+              text="This field is mandatory"
+            />
           </div>
         </div>
 
-        <mat-divider></mat-divider>
-      </mat-card-content>
+        <div class="col-12 md:col-6">
+          <div class="p-field">
+            <label for="age">Age</label>
+            <input
+              id="age"
+              formControlName="age"
+              pInputText
+              placeholder="Enter your age"
+            />
+            <p-message
+              *ngIf="submitted && f['age'].errors"
+              severity="error"
+              text="This field is mandatory"
+            />
+          </div>
+        </div>
 
-      <mat-card-actions>
-        <button mat-raised-button color="primary" class="mx-2">Save</button>
-        <button mat-raised-button [routerLink]="['/appointments']">Back</button>
-      </mat-card-actions>
-    </mat-card>
+        <div class="col-12">
+          <div class="p-field">
+            <label>Gender</label>
+            <div class="flex align-items-center gap-1">
+              <p-radioButton
+                formControlName="gender"
+                value="male"
+                inputId="male"
+                name="gender"
+                label="Male"
+              />
+              <p-radioButton
+                formControlName="gender"
+                value="female"
+                inputId="female"
+                name="gender"
+                label="Female"
+              />
+            </div>
+            <p-message
+              *ngIf="submitted && f['gender'].errors"
+              severity="error"
+              text="This field is mandatory"
+            />
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+          <div class="p-field">
+            <label for="department">Department</label>
+            <p-dropdown
+              formControlName="department"
+              [options]="departments"
+              placeholder="Select Department"
+            />
+            <p-message
+              *ngIf="submitted && f['department'].errors"
+              severity="error"
+              text="This field is mandatory"
+            />
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+          <div class="p-field">
+            <label for="doctorName">Doctor Name</label>
+            <input
+              id="doctorName"
+              formControlName="doctorName"
+              pInputText
+              placeholder="Enter doctor's name"
+            />
+            <p-message
+              *ngIf="submitted && f['doctorName'].errors"
+              severity="error"
+              text="This field is mandatory"
+            />
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+          <div class="p-field">
+            <label for="date">Date</label>
+            <p-calendar
+              formControlName="date"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+            ></p-calendar>
+            <p-message
+              *ngIf="submitted && f['date'].errors"
+              severity="error"
+              text="This field is mandatory"
+            />
+          </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+          <div class="p-field">
+            <label for="fees">Fees</label>
+            <input
+              id="fees"
+              formControlName="fees"
+              pInputText
+              placeholder="Enter fees"
+            />
+            <p-message
+              *ngIf="submitted && f['fees'].errors"
+              severity="error"
+              text="This field is mandatory"
+            />
+          </div>
+        </div>
+      </div>
+
+      <hr />
+    </div>
+
+    <footer class="flex justify-content-end">
+      <button
+        pButton
+        [routerLink]="['/appointments']"
+        label="Back"
+        class="p-button-outlined p-button-secondary"
+      ></button>
+      <button pButton type="submit" label="Save" class="mx-2"></button>
+    </footer>
   </form>
 </div>
+<p-toast />
